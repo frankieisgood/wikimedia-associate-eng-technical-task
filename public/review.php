@@ -1,7 +1,7 @@
 <?php
 
-require "./config.php";
-require "./common.php";
+require "../config.php";
+require "../common.php";
 
 if (isset($_POST['submit'])) {
 
@@ -35,16 +35,19 @@ if (isset($_POST['submit'])) {
         $statement = $connection->prepare($sql);
         $statement->execute($new_donor);
 
-    } catch(PDOException $error) {
+    } catch(PDOException $error) {	
+		echo $sql . "<br>" . $error->getMessage();
         echo "Sorry, please hit the back button, fill out all fields and try again!";
     }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="stylesheet" type="text/css" href="../css/styles.css"/>
         <title>Thank you!</title>
     </head>
     <body class="container">
@@ -53,7 +56,6 @@ if (isset($_POST['submit'])) {
         <h2>Please confirm your information.</h2>
         <table>
             <caption>You submitted...</caption>
-            <thead></thead>
             <tbody>
                 <tr>
                     <td>Last Name:</td>
@@ -97,40 +99,61 @@ if (isset($_POST['submit'])) {
                     <td><?php echo $_POST['preferredcontact'] ?></td>
                 </tr>
                 <tr>
-                    <td></td>
+                    <td>You submitted a <?php echo $_POST['donationfrequency'] ?> donation of <?php echo $_POST['donationsum'] ?> <?php echo $_POST['donationcurrency'] ?>.</td>
                 </tr>
+                <tr>
+					<td>Your total projected yearly donation is <?php 
+            			if($_POST['donationfrequency']=="monthly") {
+                			echo $_POST['donationsum']*12;
+            			} else {
+                			echo $_POST['donationsum'];
+            			}
+         			?> <?php echo $_POST['donationcurrency'] ?>. 
+					</td>
+				</tr>
+				<tr>
+					<td>In USD, your total projected yearly donation is $<?php 
+            			if($_POST['donationfrequency']=="monthly") {
+                			if($_POST['donationcurrency']=="Euro") {
+                  				echo $_POST['donationsum']*1.18*12;
+                			} else if ($_POST['donationcurrency']=="BTC"){
+                    			echo $_POST['donationsum']*59245*12;
+                			} else {
+                    			echo $_POST['donationsum']*12;
+                			}
+            			} else {
+                			if($_POST['donationcurrency']=="Euro") {
+                    			echo $_POST['donationsum']*1.18;
+                			} else if ($_POST['donationcurrency']=="BTC"){
+                    			echo $_POST['donationsum']*59245;
+                			} else {
+                    			echo $_POST['donationsum'];
+                			}
+            			}?>.    
+					</td>
+				</tr>
             </tbody>
         </table>
-        You submitted a <?php echo $_POST['donationfrequency'] ?> donation of <?php echo $_POST['donationsum'] ?> <?php echo $_POST['donationcurrency'] ?>.</br>
-        Your total projected yearly donation is <?php 
-            if($_POST['donationfrequency']=="monthly") {
-                echo $_POST['donationsum']*12;
-            } else {
-                echo $_POST['donationfrequency'];
-            }
-        
-         ?> 
-        <?php echo $_POST['donationcurrency'] ?>. <br>
-        In USD, your total projected yearly donation is $<?php 
-            if($_POST['donationfrequency']=="monthly") {
-                if($_POST['donationcurrency']=="Euro") {
-                    echo $_POST['donationsum']*1.18*12;
-                } else if ($_POST['donationcurrency']=="BTC"){
-                    echo $_POST['donationsum']*59245*12;
-                } else {
-                    echo $_POST['donationsum']*12;
-                }
-            } else {
-                if($_POST['donationcurrency']=="Euro") {
-                    echo $_POST['donationsum']*1.18;
-                } else if ($_POST['donationcurrency']=="BTC"){
-                    echo $_POST['donationsum']*59245;
-                } else {
-                    echo $_POST['donationsum'];
-                }
-            }
-         ?>.
-    </body>
+        <br>
+       	<button type="button" id="confirm">Confirm</button>
+		<script>
+   			var press = document.getElementById("confirm");
+   		
+		    press.addEventListener("click", function (event) {
+      		alert("Thank you so much! Someone will be in touch with you shortly.")
+   		})
+		</script>
+		<button type="button" id="cancel">Cancel</button>
+		<script>
+   			var press = document.getElementById("cancel");
+   			press.addEventListener("click", function (event) {
+				event.preventDefault();
+ 				window.location.replace("createdonor.php");
+				return false; 
+			}
+		)
+		</script>
+	</body>
 </html>
 
 

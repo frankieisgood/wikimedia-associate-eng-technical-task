@@ -15,7 +15,7 @@ CREATE TABLE donors (
     email VARCHAR(320) NOT NULL, 
     preferredcontact TEXT(10) NOT NULL,
     donationfrequency TEXT(20) NOT NULL,
-    donationsum VARCHAR(9) NOT NULL,
+    donationsum DECIMAL(10,2) NOT NULL,
     donationcurrency TEXT(4) NOT NULL,
     comments TEXT(255)
 )
