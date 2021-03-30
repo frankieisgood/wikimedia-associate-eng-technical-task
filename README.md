@@ -8,7 +8,7 @@ This app was tested on a local Apache2 server; credentials are stored in config.
 
 The database connection is configured for the root user, and the password is stored as an environment variable. Set a local environment variable ROOT_PW, or alternatively, hard-code your password into config.php to access the install script.
 
-On opening the app, you can click through to run the install script or proceed to the form. On first use, run the install script to connect to the MySQL database and create a database with one table.
+On first opening the app, you can click through to run the install script or proceed to the form. On first use, run the install script to connect to MySQL and create a database with one table.
 
 Once the database and table have been created, the form is ready to use! Submit your information and review.
 
