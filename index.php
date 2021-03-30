@@ -1,45 +1,3 @@
-<?php
-
-require "./config.php";
-require "./common.php";
-
-if (isset($_POST['submit'])) {
-
-    try {
-       $connection = new PDO($dsn, $username, $password, $options);
-
-        $new_donor = array(
-            "lastname" => $_POST['lastname'],
-            "firstname" => $_POST['firstname'],
-            "streetaddress" => $_POST['streetaddress'],
-            "city" => $_POST['city'],
-            "stateregion" => $_POST['stateregion'],
-            "country" => $_POST['country'],
-            "postalcode" => $_POST['postalcode'],
-            "phonenumber" => $_POST['phonenumber'],
-            "email" => $_POST['email'],
-            "preferredcontact" => $_POST['preferredcontact'],
-            "donationfrequency" => $_POST['donationfrequency'],
-            "donationsum" => $_POST['donationsum'],
-            "donationcurrency" => $_POST['donationcurrency'],
-            "comments" => $_POST['comments']
-        );
-
-        $sql = sprintf(
-            "INSERT INTO %s (%s) values (%s)",
-            "donors", 
-            implode(",", array_keys($new_donor)), 
-            ":" . implode(", :", array_keys($new_donor))
-        );
-
-        $statement = $connection->prepare($sql);
-        $statement->execute($new_donor);
-    } catch(PDOException $error) {
-        echo $sql . "<br>" . $error->getMessage();
-    }
-}
-?>
-
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -50,7 +8,7 @@ if (isset($_POST['submit'])) {
     <body class="container">
 
         <h1>Support Wikipedia!</h1>
-        <form id="donorinfo"  method="POST">
+        <form id="donorinfo" action="review.php" method="POST">
             <fieldset>
                 <legend>Prospective Donors</legend>
                 <ul>
@@ -274,7 +232,7 @@ if (isset($_POST['submit'])) {
                         );
 
                         foreach($countries as $item) {
-                            echo "<option value='strtolower($item'>$item</option>";
+                            echo "<option value='$item'>$item</option>";
                         }
                         ?>
                         </select>
@@ -308,7 +266,7 @@ if (isset($_POST['submit'])) {
                         <select id="currency" name="donationcurrency">
                             <option value="USD">USD</option>
                             <option value="Euro">Euro</option>
-                            <option value="Bitcoin">BTC</option>
+                            <option value="BTC">BTC</option>
                         </select>
                     </li>
                     <li>
